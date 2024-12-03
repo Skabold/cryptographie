@@ -20,10 +20,10 @@ class Compression:
 
     def compress_round(self, i):
         # Sélection des "words" en fonction du round
-        word1 = self.words[i % BLOCK_DIV]
-        word2 = self.prev_words[(i + 1) % BLOCK_DIV]
-        word3 = self.words[(i + 2) % BLOCK_DIV]
-        word4 = self.prev_words[(i + 3) % BLOCK_DIV]
+        word1 = self.words[i]
+        word2 = self.prev_words[(i - 1)]
+        word3 = self.words[(i - 2)]
+        word4 = self.prev_words[(i - 3)]
 
         # Création de l'algorithme de mélange
         mixed_word = sub_word(word1)
@@ -50,7 +50,6 @@ def hash_block(block, prev):
         cmp.compress_round(i)
 
     return cmp.get_result()
-
 
 def truncate_cmp(hash):
     return xor(hash, IV)
