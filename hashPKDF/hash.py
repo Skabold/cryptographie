@@ -123,16 +123,15 @@ def custhash(message):
         - Tronque le résultat final.
     """
     message = message.encode('utf-8')
-    padded_message = pad(message)
+    padded_msg = pad(message)
     prev_block = IV
-    new_hash = b""
-
-    for i in range(0, len(padded_message), BS):
-        block = padded_message[i:i + BS]
+    
+    # Process each block in the padded message
+    for i in range(0, len(padded_msg), BS):
+        block = padded_msg[i:i + BS]
         prev_block = hash_block(block, prev_block)
-        new_hash = prev_block
 
-    return truncate_cmp(new_hash)
+    return truncate_cmp(prev_block)
 
 def test_hash_function():
     """
@@ -142,8 +141,8 @@ def test_hash_function():
         - Vérifie que des messages proches produisent des hashes différents (effet d'avalanche).
         - Mesure le temps moyen d'exécution du hachage sur 100 itérations.
     """
-    h1 = custhash("Je suis une truite")
-    h2 = custhash("Je suis une truita")
+    h1 = custhash("J'emmerde les truites")
+    h2 = custhash("JJ'emmerde les truites!")
     print("Hash 1:", h1.hex())
     print("Hash 2:", h2.hex())
     assert h1 != h2, "The hashes should be different"
