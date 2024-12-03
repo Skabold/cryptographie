@@ -1,4 +1,4 @@
-from hashPKDF.hash import test_hash_function
+from hash import test_hash_function
 
 
 test_hash_function()
