@@ -1,3 +1,4 @@
+from filecmp import cmp
 from hash_utils import *  # Import the utility functions
 
 """
