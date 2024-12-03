@@ -70,7 +70,6 @@ def custhash (message):
     return truncate_cmp(new_hash)
 
 
-# TODO Step 4
 def test_hash_function():
     h1 = custhash ("Je suis une truite")
     h2 = custhash ("Je suis une truita")
