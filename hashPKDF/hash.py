@@ -35,8 +35,20 @@ def truncate_cmp(hash):
     return word
 
 def custhash(message):
-    # TODO Step 1
-    return truncate_cmp(new_hash)
+    #block 1
+    prev_block = IV
+    
+    # padding ++
+    padded_msg = pad(message.encode("utf-8")) 
+    
+    # loop blocks
+    for i in range(0, len(padded_msg), BS):
+        block = padded_msg[i:i + BS]
+        prev_block = hash_block(block, prev_block)
+        
+    todolater = null
+    return todolater
+
 
 # TODO Step 4
 h1 = custhash("Je suis une truite")
