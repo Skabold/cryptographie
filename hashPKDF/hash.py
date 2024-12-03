@@ -48,17 +48,19 @@ class Compression:
             - Ajoute le nouveau mot à la liste des mots actuels.
         """
         # Sélection des mots
-        word1 = self.words[i]
-        word2 = self.prev_words[(i)]
-        word3 = self.words[(i + 2)]
-        word4 = self.prev_words[(i + 2)]
+        word1 = self.words[i % len(self.words)]
+        word2 = self.prev_words[i % len(self.prev_words)]
+        word3 = self.words[(i - 2) % len(self.words)]
+        word4 = self.prev_words[(i - 2) % len(self.prev_words)]
 
-        # Mélange
-        mixed_word_1 = xor(word1, word2)
-        mixed_word_2 = xor(word3, word4)
-        mixed_word_f = xor(mixed_word_1, mixed_word_2)
+        mixed_word = sub_word(word1)
+        mixed_word = xor(mixed_word, rot_left(word2, i % 8))
+        mixed_word = bitand(mixed_word, rot_right(word3, (i + 3) % 8))
+        mixed_word = xor(mixed_word, word4)
+        cross_mixed = xor(rot_left(word2, 5), rot_right(word4, 3))
+        mixed_word = xor(mixed_word, cross_mixed)
 
-        self.words.append(mixed_word_f)
+        self.words.append(mixed_word)
 
     def get_result(self):
         """
@@ -87,7 +89,7 @@ def hash_block(block, prev):
     assert len(prev) == BS
 
     cmp = Compression(block, prev)
-    N = 10  # Nombre de tours de compression
+    N = 100 
     for i in range(N):
         cmp.compress_round(i)
 
@@ -128,7 +130,7 @@ def custhash(message):
     for i in range(0, len(padded_message), BS):
         block = padded_message[i:i + BS]
         prev_block = hash_block(block, prev_block)
-        new_hash += prev_block
+        new_hash = prev_block
 
     return truncate_cmp(new_hash)
 
