@@ -29,8 +29,13 @@ class Compression:
         Exceptions :
             - AssertionError : Si le nombre de mots dans les blocs n'est pas égal à BLOCK_DIV.
         """
+        print("[DEBUG] Initializing Compression")
+
         words = block_to_words(block)
         prev_words = block_to_words(prev_block)
+        print("Words:", words)
+        print("Previous Words:", prev_words)
+
         assert len(words) == BLOCK_DIV
         assert len(prev_words) == BLOCK_DIV
         self.words = words
@@ -47,11 +52,14 @@ class Compression:
             - Mélange les mots actuels et précédents pour produire un nouveau mot.
             - Ajoute le nouveau mot à la liste des mots actuels.
         """
-        # Sélection des mots
+        print(f"[DEBUG] Compression round {i}")
+
         word1 = self.words[i % len(self.words)]
         word2 = self.prev_words[i % len(self.prev_words)]
-        word3 = self.words[(i - 2) % len(self.words)]
-        word4 = self.prev_words[(i - 2) % len(self.prev_words)]
+        word3 = self.words[(i + 1) % len(self.words)]
+        word4 = self.prev_words[(i + 1) % len(self.prev_words)]
+
+        print(f"Word1: {word1}, Word2: {word2}, Word3: {word3}, Word4: {word4}")
 
         mixed_word = sub_word(word1)
         mixed_word = xor(mixed_word, rot_left(word2, i % 8))
@@ -59,6 +67,8 @@ class Compression:
         mixed_word = xor(mixed_word, word4)
         cross_mixed = xor(rot_left(word2, 5), rot_right(word4, 3))
         mixed_word = xor(mixed_word, cross_mixed)
+
+        print(f"Mixed Word: {mixed_word}")
 
         self.words.append(mixed_word)
 
@@ -69,7 +79,10 @@ class Compression:
         Retourne :
             - bytes : Le bloc compressé sous forme de bytes, à partir des derniers mots.
         """
-        return words_to_block(self.words[-BLOCK_DIV:])
+        print("[DEBUG] Getting compression result")
+        result = words_to_block(self.words[-BLOCK_DIV:]) # Use only the last 4 words
+        print("Result:", result)
+        return result
 
 def hash_block(block, prev):
     """
@@ -85,15 +98,22 @@ def hash_block(block, prev):
     Exceptions :
         - AssertionError : Si les blocs ne sont pas de longueur BS.
     """
+    print("[DEBUG] Hashing block")
+    print("Block:", block)
+    print("Previous Block:", prev)
+
     assert len(block) == BS
     assert len(prev) == BS
 
     cmp = Compression(block, prev)
-    N = 100 
+    N = 10
     for i in range(N):
         cmp.compress_round(i)
 
-    return cmp.get_result()
+    result = cmp.get_result()
+    print("[DEBUG] Hash Block Result:", result)
+    return result
+
 
 def truncate_cmp(hash):
     """
@@ -105,6 +125,7 @@ def truncate_cmp(hash):
     Retourne :
         - bytes : Le hash tronqué.
     """
+    print("[DEBUG] Truncating hash")
     return xor(hash, IV)
 
 def custhash(message):
@@ -122,16 +143,24 @@ def custhash(message):
         - Itère sur les blocs pour effectuer le hachage.
         - Tronque le résultat final.
     """
+    print("[DEBUG] Custom hashing message")
+    print("Message:", message)
+
     message = message.encode('utf-8')
     padded_msg = pad(message)
+    print("Padded Message:", padded_msg)
+
     prev_block = IV
     
-    # Process each block in the padded message
     for i in range(0, len(padded_msg), BS):
         block = padded_msg[i:i + BS]
+        print()
+        print(f"[DEBUG] Processing block {i // BS}")
         prev_block = hash_block(block, prev_block)
 
-    return truncate_cmp(prev_block)
+    final_hash = truncate_cmp(prev_block)
+    print("[DEBUG] Final Hash:", final_hash)
+    return final_hash
 
 def test_hash_function():
     """
@@ -141,6 +170,7 @@ def test_hash_function():
         - Vérifie que des messages proches produisent des hashes différents (effet d'avalanche).
         - Mesure le temps moyen d'exécution du hachage sur 100 itérations.
     """
+    print("[DEBUG] Testing hash function")
     h1 = custhash("J'emmerde les truites")
     h2 = custhash("J'emmerde les truites!")
     print("Hash 1:", h1.hex())
@@ -154,3 +184,4 @@ def test_hash_function():
     end_time = time.time()
     avg_time = (end_time - start_time) / 100
     print(f"Average time per block: {avg_time * 1000:.2f} ms")
+
