@@ -56,7 +56,7 @@ def truncate_cmp(hash):
     return xor(hash, IV)
 
 
-def my_hash(message):
+def custhash (message):
     message = message.encode('utf-8')
     padded_message = pad(message)
     prev_block = IV
@@ -72,8 +72,8 @@ def my_hash(message):
 
 # TODO Step 4
 def test_hash_function():
-    h1 = my_hash("Je suis une truite")
-    h2 = my_hash("Je suis une truita")
+    h1 = custhash ("Je suis une truite")
+    h2 = custhash ("Je suis une truita")
     print("Hash 1:", h1.hex())
     print("Hash 2:", h2.hex())
     assert h1 != h2, "The hashes should be different"
@@ -81,7 +81,7 @@ def test_hash_function():
     # Measure execution time
     start_time = time.time()
     for _ in range(100):
-        my_hash("Je suis une truite")
+        custhash ("Je suis une truite")
     end_time = time.time()
     avg_time = (end_time - start_time) / 100
     print(f"Average time per block: {avg_time * 1000:.2f} ms")
