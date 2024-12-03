@@ -19,22 +19,18 @@ class Compression:
         self.prev_words = prev_words
 
     def compress_round(self, i):
-        # Sélection des "words" en fonction du round
+        # Sélection des mots
         word1 = self.words[i]
-        word2 = self.prev_words[(i - 1)]
-        word3 = self.words[(i - 2)]
-        word4 = self.prev_words[(i - 3)]
+        word2 = self.prev_words[(i)]
+        word3 = self.words[(i + 2)]
+        word4 = self.prev_words[(i + 2)]
 
-        # Création de l'algorithme de mélange
-        mixed_word = sub_word(word1)
-        mixed_word = xor(mixed_word, word2)
-        mixed_word = bitand(mixed_word, word3)
-        mixed_word = rot_left(mixed_word, i % 4)
-        mixed_word = xor(mixed_word, word4)
-        mixed_word = rot_right(mixed_word, (i + 1) % 4)
+        # mélange
+        mixed_word_1 = xor(word1, word2)
+        mixed_word_2 = xor(word3, word4)
+        mixed_word_f = xor(mixed_word_1, mixed_word_2)
 
-        # Ajout du nouveau "word" à la liste self.words
-        self.words.append(mixed_word)
+        self.words.append(mixed_word_f)
 
     def get_result(self):
         return words_to_block(self.words[-BLOCK_DIV:])
@@ -83,6 +79,3 @@ def test_hash_function():
     end_time = time.time()
     avg_time = (end_time - start_time) / 100
     print(f"Average time per block: {avg_time * 1000:.2f} ms")
-
-
-test_hash_function()
