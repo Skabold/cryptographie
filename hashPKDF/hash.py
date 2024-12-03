@@ -142,7 +142,7 @@ def test_hash_function():
         - Mesure le temps moyen d'exécution du hachage sur 100 itérations.
     """
     h1 = custhash("J'emmerde les truites")
-    h2 = custhash("JJ'emmerde les truites!")
+    h2 = custhash("J'emmerde les truites!")
     print("Hash 1:", h1.hex())
     print("Hash 2:", h2.hex())
     assert h1 != h2, "The hashes should be different"
