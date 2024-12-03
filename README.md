@@ -1,8 +1,14 @@
 # cryptographie
 
+hashPKDF :
+
+- hash.py : les fonctions en TODO
+- hash_utils : les fonctions qu'on touche pas
+- main : le main
+
 RSA :
 
-- Main : c'est le main
+- main : c'est le main
 - rsa_utils : les maths qui était dans rsa.py de base
 - rsa : la classe rsa
 - send : la méthode pour send des messages
