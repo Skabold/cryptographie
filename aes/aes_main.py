@@ -11,6 +11,4 @@ encrypted_message, mac = send_message(sender_keys_file, message_to_send)
 
 aes = AES.import_key_from_file("aes_keys.json")
 aes.decrypt(encrypted_message)
-print()
-print()
 aes.receive(encrypted_message,mac)

@@ -56,7 +56,6 @@ class AES:
         Returns:
         dict: The decrypted data as a dictionary.
         """
-        print(data)
         round_keys = generate_round_keys(self.key)
 
         lblock = data[-BLOCK_SIZE:]
@@ -75,7 +74,6 @@ class AES:
             for round in range(1, N_ROUNDS+1):
                 lblock = aes_inv_round(lblock, round_keys, N_ROUNDS - round)
 
-        print(output)
         output = pkcs_unpad(output)
         return json.loads(output.decode('utf-8'))
 
@@ -134,15 +132,12 @@ class AES:
         """
         decrypted_data = self.decrypt(message)
         key_str = base64.b64encode(self.key).decode('utf-8')
-        generated_hash = self.generate_hash(key_str + decrypted_data)
-        
-        print()
-        print()
-        print("Decrypted message:", repr(decrypted_data))  # Use repr to see raw byte content
-        print("Generated hash of decrypted message:", self.generate_hash(decrypted_data))
+        decrypted_message = decrypted_data.get("message", "")
+        generated_hash = self.generate_hash(key_str + decrypted_message)
 
         # Check if the generated hash matches the provided mac
         if generated_hash != mac:
             raise ValueError("Message integrity check failed. Mic does not match.")
-
+        else:
+            # print("sucess")
         return decrypted_data
