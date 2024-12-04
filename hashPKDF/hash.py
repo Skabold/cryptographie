@@ -19,7 +19,6 @@ Paramètres globaux :
 - `IV` : Valeur initiale (Initial Vector) pour le hachage.
 """
 
-from filecmp import cmp
 from hash_utils import *
 import time
 
@@ -142,22 +141,36 @@ def custhash(message):
     return final_hash
 
 
-def test_hash_function():
+def pkdf(password, salt, iterations, key_length=16):
     """
-    Teste la fonction de hachage personnalisée.
+    Génère une clé dérivée à partir d'un mot de passe et d'un salt.
 
-    - Vérifie que des messages similaires produisent des hashes différents (effet d'avalanche).
-    - Mesure le temps moyen d'exécution pour 100 itérations.
+    :param password: (str) Mot de passe utilisé pour générer la clé.
+    :param salt: (bytes) Salt unique pour cette opération.
+    :param iterations: (int) Nombre d'itérations pour ralentir le calcul.
+    :param key_length: (int) Longueur souhaitée de la clé dérivée en octets (par défaut : 16).
+    :return: (bytes) Clé dérivée.
     """
-    print("Premiers 2 identiques, 3e différent")
-    print(custhash("test"))
-    print(custhash("test"))
-    print(custhash("tesy"))
+    assert isinstance(password, str), "Le mot de passe doit être une chaîne de caractères."
+    assert isinstance(salt, bytes), "Le salt doit être un objet bytes."
+    assert key_length > 0, "La longueur de clé doit être positive."
+    
+    # Étape 1 : Convertir le mot de passe en bytes
+    password_bytes = password.encode('utf-8')
+    
+    # Étape 2 : Initialiser une variable pour stocker le résultat
+    derived_key = b''
+    
+    # Étape 3 : Effectuer les itérations
+    block = password_bytes + salt
+    for i in range(iterations):
+        block = custhash(block.decode('latin-1'))  # Hash avec custhash (adaptation nécessaire)
+    
+    # Étape 4 : Tronquer ou étendre pour obtenir la longueur souhaitée
+    derived_key = block[:key_length]
+    
+    return derived_key
 
-    # Mesure du temps d'exécution
-    start_time = time.time()
-    for _ in range(100):
-        custhash("J'emmerde les truites :D")
-    end_time = time.time()
-    avg_time = (end_time - start_time) / 100
-    print(f"Temps moyen par bloc : {avg_time * 1000:.2f} ms")
+
+
+
