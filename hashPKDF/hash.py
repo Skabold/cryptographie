@@ -106,12 +106,15 @@ def hash_block(block, prev):
 
 def truncate_cmp(hash):
     """
-    Tronque le hash final en le combinant avec une valeur IV initiale.
+    Tronque le hash de 512 bits à 256 bits en combinant les deux moitiés via XOR.
 
-    :param hash: (bytes) Hash calculé.
-    :return: (bytes) Hash tronqué.
+    :param hash: (bytes) Hash calculé (512 bits).
+    :return: (bytes) Hash tronqué (256 bits).
     """
-    return xor(hash, IV)
+    half_size = len(hash) // 2
+    first_half = hash[:half_size]
+    second_half = hash[half_size:]
+    return xor(first_half, second_half)
 
 
 def custhash(message):
@@ -128,7 +131,7 @@ def custhash(message):
     for i in range(0, len(padded_msg), BS):
         block = padded_msg[i:i + BS]
 
-        # Mélange dynamique
+        # Mélange dynamique (magique, je capte pas)
         dynamic_mix = xor(prev_block, i.to_bytes(BS, 'big', signed=False))
         dynamic_mix = xor(dynamic_mix, block)
         prev_block = dynamic_mix
