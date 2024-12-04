@@ -39,7 +39,7 @@ def test_pkdf():
         print(f"Nouvel essai avec {iterations} itérations : {elapsed_time:.2f} ms")
         iterations += 10
         start_time = time.time()
-        derived_key = pkdf(password, salt, iterations, key_length)
+        derived_key = pkdf(password, salt, iterations)
         print(f"Clé dérivée : {derived_key.hex()}")
         end_time = time.time()
         elapsed_time = (end_time - start_time) * 1000 
