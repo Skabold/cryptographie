@@ -1,3 +1,4 @@
+import base64
 from aes import AES
 
 def send_message(keys_file, message):
@@ -13,11 +14,11 @@ def send_message(keys_file, message):
     
     # GET THE KEY VALUE
     key = aes1.key  
-    
+    key_str = base64.b64encode(key).decode('utf-8')
     # Encrypt the message
     enc = aes1.encrypt({"message": message})
     
     # Generate the hash using the AES key and the concatenated message
-    generated_hash = aes1.generate_hash(key + message)
+    generated_hash = aes1.generate_hash(key_str + message)
     
     return enc, generated_hash

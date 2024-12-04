@@ -1,4 +1,4 @@
-from send import send_message  # This assumes the send_message function is defined in send.py
+from rsa.rsa_send import send_message  # This assumes the send_message function is defined in send.py
 from rsa import RSA
 
 # Initialize RSA instance (as both sender and receiver)

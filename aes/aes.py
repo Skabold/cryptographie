@@ -56,6 +56,7 @@ class AES:
         Returns:
         dict: The decrypted data as a dictionary.
         """
+        print(data)
         round_keys = generate_round_keys(self.key)
 
         lblock = data[-BLOCK_SIZE:]
@@ -74,6 +75,7 @@ class AES:
             for round in range(1, N_ROUNDS+1):
                 lblock = aes_inv_round(lblock, round_keys, N_ROUNDS - round)
 
+        print(output)
         output = pkcs_unpad(output)
         return json.loads(output.decode('utf-8'))
 
@@ -111,8 +113,6 @@ class AES:
         :param message: (str) The message to hash.
         :return: (str) The hexadecimal representation of the hash.
         """
-        if isinstance(message, str):
-            message = message.encode('utf-8')
         # Use custhash to generate the hash (bytes format)
         custom_hash_bytes = custhash(message)
         
@@ -121,27 +121,28 @@ class AES:
 
         return custom_hash_hex
     
-    def receive(self, message, mic):
+    def receive(self, message, mac):
         """
         Verify the message integrity and decrypt the message.
 
         Parameters:
         message (bytes): The encrypted message to receive.
-        mic (str): The message integrity code (hash) to verify the message integrity.
+        mac (str): The message integrity code (hash) to verify the message integrity.
 
         Returns:
-        dict: The decrypted data as a dictionary, if the mic matches.
+        dict: The decrypted data as a dictionary, if the mac matches.
         """
-        
+        print(message)
         decrypted_data = self.decrypt(message)
+        key_str = base64.b64encode(self.key).decode('utf-8')
+        generated_hash = self.generate_hash(key_str + decrypted_data)
         
-        generated_hash = self.generate_hash(self.key + decrypted_data)
         
         print("Decrypted message:", repr(decrypted_data))  # Use repr to see raw byte content
         print("Generated hash of decrypted message:", self.generate_hash(decrypted_data))
 
-        # Check if the generated hash matches the provided mic
-        if generated_hash != mic:
+        # Check if the generated hash matches the provided mac
+        if generated_hash != mac:
             raise ValueError("Message integrity check failed. Mic does not match.")
 
         return decrypted_data

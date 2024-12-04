@@ -7,7 +7,6 @@ def send_message(dest_pubk, sender_keys_file, message):
     # Encrypt the message using the recipient's public key
     enc = rsa1.encrypt(message, dest_pubk)
     
-    # Generate a SHA-256 hash of the message
     generated_hash = rsa1.generate_hash(message)
     
     # Sign the message using the sender's private key
