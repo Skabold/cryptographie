@@ -1,4 +1,5 @@
 import hashlib
+from hashPKDF.hash import custhash
 from rsa_utils import get_large_prime_number, eucalg, modpow
 import json
 import os
@@ -77,10 +78,19 @@ class RSA:
         return rsa_instance
     
     def generate_hash(self, message):
-        """Generate a SHA-256 hash of the message."""
-        message_bytes = message.encode('utf-8')
-        sha256_hash = hashlib.sha256(message_bytes).hexdigest()
-        return sha256_hash
+        """
+        Generate a custom hash for the given message using custhash.
+        
+        :param message: (str) The message to hash.
+        :return: (str) The hexadecimal representation of the hash.
+        """
+        # Use custhash to generate the hash (bytes format)
+        custom_hash_bytes = custhash(message)
+        
+        # Convert the hash to a hexadecimal string
+        custom_hash_hex = custom_hash_bytes.hex()
+
+        return custom_hash_hex
     
     def receive(self, enc, signature, received_hash):
         """Receive an encrypted message, verify the signature, and check the hash for integrity."""

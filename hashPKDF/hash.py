@@ -19,7 +19,7 @@ Paramètres globaux :
 - `IV` : Valeur initiale (Initial Vector) pour le hachage.
 """
 
-from hash_utils import *
+from hashPKDF.hash_utils import *
 import time
 
 
