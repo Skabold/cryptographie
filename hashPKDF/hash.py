@@ -19,6 +19,7 @@ Paramètres globaux :
 - `IV` : Valeur initiale (Initial Vector) pour le hachage.
 """
 
+import os
 from hashPKDF.hash_utils import *
 
 
@@ -166,6 +167,13 @@ def pkdf(password, salt, iterations):
     derived_key = block[:16]
     
     return derived_key
+
+"""
+Generate a pkfd based on my expirimental data
+"""
+def get_pkfd():
+    derived_key = pkdf("motdepasse", os.urandom(16), 25)
+    return derived_key.hex()
 
 
 

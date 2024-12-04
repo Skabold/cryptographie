@@ -4,12 +4,12 @@ hashPKDF :
 
 - hash.py : les fonctions en TODO
 - hash_utils : les fonctions qu'on touche pas
-- hash_main : le main pour tester les trucs de hashPKFD
+- hash_main : cassé
   - `N = 1000 #DEPEND DU PC ON VISE Temps moyen d'exécution pour 100.00 essais : 19.78 ms`
 
 RSA :
 
-- rsa_main : c'est le main pour tester les trucs rsa
+- rsa_main : cassé
 - rsa_utils : les maths qui était dans rsa.py de base
 - rsa : la classe rsa (receive / hash / sign / verify / ...)
 - send : la méthode pour send des messages
@@ -17,7 +17,7 @@ RSA :
 
 AES :
 
-- aes_main : c'est le main pour tester les trucs aes
+- aes_main : cass"
 - aes_utils : les maths qui était dans aes.py de base
 - aes : la classe aes (receive / hash )
 - send : la méthode send
@@ -25,3 +25,5 @@ AES :
 Update python path :
 
 - export PYTHONPATH=lepath/le dossier au dessus des folders aes / rsa / hashPKDF
+
+- main : le main

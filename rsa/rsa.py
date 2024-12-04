@@ -1,6 +1,5 @@
-import hashlib
 from hashPKDF.hash import custhash
-from rsa_utils import get_large_prime_number, eucalg, modpow
+from rsa.rsa_utils import get_large_prime_number, eucalg, modpow
 import json
 import os
 

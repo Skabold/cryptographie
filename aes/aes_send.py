@@ -1,5 +1,5 @@
 import base64
-from aes import AES
+from aes.aes import AES
 
 def send_message(keys_file, message):
     """
