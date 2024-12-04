@@ -157,16 +157,14 @@ def pkdf(password, salt, iterations, key_length=16):
     
     # Étape 1 : Convertir le mot de passe en bytes
     password_bytes = password.encode('utf-8')
-    
-    # Étape 2 : Initialiser une variable pour stocker le résultat
     derived_key = b''
     
     # Étape 3 : Effectuer les itérations
     block = password_bytes + salt
     for i in range(iterations):
-        block = custhash(block.decode('latin-1'))  # Hash avec custhash (adaptation nécessaire)
+        block = custhash(block.decode('latin-1'))  
     
-    # Étape 4 : Tronquer ou étendre pour obtenir la longueur souhaitée
+    # Étape 4 : 16
     derived_key = block[:key_length]
     
     return derived_key
