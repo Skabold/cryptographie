@@ -101,16 +101,7 @@ class RSA:
         decrypted_message = decrypted_message.lstrip('\x00').strip()
 
         # Verify the signature
-        is_verified = self.verify(decrypted_message, signature, self.pubk)
-        
-        # Generate the hash of the decrypted message to compare with the received hash
-        print("Decrypted message:", repr(decrypted_message))  # Use repr to see raw byte content
-        print("Generated hash of decrypted message:", self.generate_hash(decrypted_message))
-        
-        # Print the expected message hash (this should be the same as the received one)
-        expected_message = "Hello, this is a secure message!"
-        print("Generated hash of expected message:", self.generate_hash(expected_message)) 
-        
+        is_verified = self.verify(decrypted_message, signature, self.pubk)     
         hash_matches = (self.generate_hash(decrypted_message) == received_hash)
         
         return decrypted_message, is_verified, hash_matches

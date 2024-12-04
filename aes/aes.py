@@ -132,12 +132,12 @@ class AES:
         Returns:
         dict: The decrypted data as a dictionary, if the mac matches.
         """
-        print(message)
         decrypted_data = self.decrypt(message)
         key_str = base64.b64encode(self.key).decode('utf-8')
         generated_hash = self.generate_hash(key_str + decrypted_data)
         
-        
+        print()
+        print()
         print("Decrypted message:", repr(decrypted_data))  # Use repr to see raw byte content
         print("Generated hash of decrypted message:", self.generate_hash(decrypted_data))
 
