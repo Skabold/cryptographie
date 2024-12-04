@@ -20,7 +20,6 @@ Paramètres globaux :
 """
 
 from hashPKDF.hash_utils import *
-import time
 
 
 class Compression:
