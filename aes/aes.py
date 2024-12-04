@@ -2,6 +2,7 @@ import os
 import json
 import base64
 from aes_utils import *
+from hashPKDF.hash import custhash
 
 class AES:
     def __init__(self, key=None):
@@ -101,3 +102,46 @@ class AES:
         if encoded_key is None:
             raise ValueError("No key found in the JSON file.")
         return cls.from_export(encoded_key)
+    
+    
+    def generate_hash(self, message):
+        """
+        Generate a custom hash for the given message using custhash.
+        
+        :param message: (str) The message to hash.
+        :return: (str) The hexadecimal representation of the hash.
+        """
+        if isinstance(message, str):
+            message = message.encode('utf-8')
+        # Use custhash to generate the hash (bytes format)
+        custom_hash_bytes = custhash(message)
+        
+        # Convert the hash to a hexadecimal string
+        custom_hash_hex = custom_hash_bytes.hex()
+
+        return custom_hash_hex
+    
+    def receive(self, message, mic):
+        """
+        Verify the message integrity and decrypt the message.
+
+        Parameters:
+        message (bytes): The encrypted message to receive.
+        mic (str): The message integrity code (hash) to verify the message integrity.
+
+        Returns:
+        dict: The decrypted data as a dictionary, if the mic matches.
+        """
+        
+        decrypted_data = self.decrypt(message)
+        
+        generated_hash = self.generate_hash(self.key + decrypted_data)
+        
+        print("Decrypted message:", repr(decrypted_data))  # Use repr to see raw byte content
+        print("Generated hash of decrypted message:", self.generate_hash(decrypted_data))
+
+        # Check if the generated hash matches the provided mic
+        if generated_hash != mic:
+            raise ValueError("Message integrity check failed. Mic does not match.")
+
+        return decrypted_data
