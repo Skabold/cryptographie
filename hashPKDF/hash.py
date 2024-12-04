@@ -94,7 +94,7 @@ def hash_block(block, prev):
     assert len(prev) == BS
 
     cmp = Compression(block, prev)
-    N = 60
+    N = 1000
     for i in range(N):
         cmp.compress_round(i)
 
