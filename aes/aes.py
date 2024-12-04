@@ -138,6 +138,4 @@ class AES:
         # Check if the generated hash matches the provided mac
         if generated_hash != mac:
             raise ValueError("Message integrity check failed. Mic does not match.")
-        else:
-            # print("sucess")
         return decrypted_data
