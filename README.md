@@ -19,7 +19,8 @@ AES :
 
 - aes_main : c'est le main pour tester les trucs aes
 - aes_utils : les maths qui était dans aes.py de base
-- aes : la classe aes
+- aes : la classe aes (receive / hash )
+- send : la méthode send
 
 Update python path :
 
