@@ -94,7 +94,7 @@ def hash_block(block, prev):
     assert len(prev) == BS
 
     cmp = Compression(block, prev)
-    N = 1000
+    N = 1000 #DEPEND DU PC ON VISE Temps moyen d'exécution pour 100.00 essais : 19.78 ms
     for i in range(N):
         cmp.compress_round(i)
 
