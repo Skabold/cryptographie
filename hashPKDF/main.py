@@ -24,7 +24,7 @@ def test_pkdf():
     password = "mon_super_mot_de_passe"
     salt = os.urandom(16)  
     key_length = 16  # 128 bits
-    iterations = 350 # je connais déjà le résultat (~380)
+    iterations = 320 # je connais déjà le résultat (~350ms / 390ms) pour moi
     
     # Mesurer le temps de calcul
     start_time = time.time()
@@ -33,17 +33,18 @@ def test_pkdf():
     
     # Afficher les résultats
     elapsed_time = (end_time - start_time) * 1000 
-    print(f"Clé dérivée : {derived_key.hex()}")
     print(f"Temps de calcul : {elapsed_time:.2f} ms")
     
     # Ajuster le nombre d'itérations
     while elapsed_time < 500:
+        print(f"Nouvel essai avec {iterations} itérations : {elapsed_time:.2f} ms")
         iterations += 10
         start_time = time.time()
         derived_key = pkdf(password, salt, iterations, key_length)
+        print(f"Clé dérivée : {derived_key.hex()}")
         end_time = time.time()
-        elapsed_time = (end_time - start_time) * 1000
-        print(f"Nouvel essai avec {iterations} itérations : {elapsed_time:.2f} ms")
+        elapsed_time = (end_time - start_time) * 1000 
+        
 
 # Exécuter le test
 test_hash_function()
