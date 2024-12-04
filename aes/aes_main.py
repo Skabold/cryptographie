@@ -1,23 +1,24 @@
-
-# Exemple d'utilisation
+# 1. Create an AES instance (AES1) and encrypt a message
 from aes import AES
 
 
-cipher = AES(key=bytearray.fromhex("2b7e151628aed2a6abf7158809cf4f3c"))
+aes1 = AES()
+data_to_encrypt = {"message": "This is a secret message!"}
+encrypted_data = aes1.encrypt(data_to_encrypt)
+print("Encrypted data:", encrypted_data)
 
-data = {'message': 'Hello, World!'}
-encrypted_data = cipher.encrypt(data)
-print(f"Encrypted data: {encrypted_data}")
-decrypted_data = cipher.decrypt(encrypted_data)
-print(f"Decrypted data: {decrypted_data}")
+# 2. Export the AES key from AES1 and save it to a JSON file
+aes1.export_key_to_file("aes_keys.json")
+print("AES key saved to aes_keys.json")
 
+# 3. Import the AES key from the JSON file and create a new AES instance (AES2)
+aes2 = AES.import_key_from_file("aes_keys.json")
+print("AES key loaded from aes_keys.json")
 
-# Exemple d'utilisation use the key from a friend and his message
-encoded_key = "56dzKUA2T1LqpleJRKfUzA=="
-encrypted_data = b'\xdd\xcb\xbc_k\x91A\x91pw\xe9\x8f\xe0\xe4\xcf\x13\x87\xd0M\xae\xca1\xffJbz\x0b\xb5,~\xe3h\xe6\x17\x8b\xe7S\xa2\x03\xcc\xa4\x08hj\xc4a6a'
+# 4. Decrypt the message using AES2
+decrypted_data = aes2.decrypt(encrypted_data)
+print("Decrypted data:", decrypted_data)
 
-# Importer la clé AES
-cipher = AES.from_export(encoded_key)
-# Déchiffrer le message encodé
-decrypted_data = cipher.decrypt(encrypted_data)
-print(f"Decrypted data : {decrypted_data}")
+# The decrypted data should match the original message
+assert decrypted_data == data_to_encrypt
+print("Decryption successful. The original message was:", decrypted_data)

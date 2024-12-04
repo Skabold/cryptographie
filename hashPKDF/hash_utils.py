@@ -10,7 +10,7 @@ MSG_SIZE_LEN = 8
 BLOCK_DIV = 16
 IV = bytes([BS-i for i in range(BS)])
 
-with open("./aes/aes.json", "r") as f:
+with open("./aes.json", "r") as f:
     CONSTANTS = json.load(f)
 
 

@@ -8,7 +8,7 @@ N_ROUNDS = 10
 BLOCK_SIZE = 16
 NCOL = 4    # SQRT(16)
 
-with open("./aes/aes.json", "r") as f:
+with open("./aes.json", "r") as f:
     CONSTANTS = json.load(f)
 
 class PaddingError(Exception):

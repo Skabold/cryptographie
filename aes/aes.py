@@ -1,14 +1,12 @@
 import os
 import json
 import base64
-
 from aes_utils import *
-### Début du TP
-# Validate avec https://www.samiam.org/key-schedule.html
+
 class AES:
     def __init__(self, key=None):
         if key is None:
-            key = os.urandom(BLOCK_SIZE)
+            key = os.urandom(BLOCK_SIZE)  # Generate a random key if none is provided
         self.key = key
 
     def encrypt(self, data):
@@ -88,22 +86,18 @@ class AES:
         key = base64.b64decode(encoded_key)
         return cls(key)
 
-# Exemple d'utilisation
-cipher = AES(key=bytearray.fromhex("2b7e151628aed2a6abf7158809cf4f3c"))
+    def export_key_to_file(self, filepath):
+        """Export the AES key to a JSON file."""
+        encoded_key = self.export()
+        with open(filepath, 'w') as f:
+            json.dump({"key": encoded_key}, f)
 
-data = {'message': 'Hello, World!'}
-encrypted_data = cipher.encrypt(data)
-print(f"Encrypted data: {encrypted_data}")
-decrypted_data = cipher.decrypt(encrypted_data)
-print(f"Decrypted data: {decrypted_data}")
-
-
-# Exemple d'utilisation use the key from a friend and his message
-encoded_key = "56dzKUA2T1LqpleJRKfUzA=="
-encrypted_data = b'\xdd\xcb\xbc_k\x91A\x91pw\xe9\x8f\xe0\xe4\xcf\x13\x87\xd0M\xae\xca1\xffJbz\x0b\xb5,~\xe3h\xe6\x17\x8b\xe7S\xa2\x03\xcc\xa4\x08hj\xc4a6a'
-
-# Importer la clé AES
-cipher = AES.from_export(encoded_key)
-# Déchiffrer le message encodé
-decrypted_data = cipher.decrypt(encrypted_data)
-print(f"Decrypted data : {decrypted_data}")
+    @classmethod
+    def import_key_from_file(cls, filepath):
+        """Import the AES key from a JSON file."""
+        with open(filepath, 'r') as f:
+            data = json.load(f)
+        encoded_key = data.get("key")
+        if encoded_key is None:
+            raise ValueError("No key found in the JSON file.")
+        return cls.from_export(encoded_key)
