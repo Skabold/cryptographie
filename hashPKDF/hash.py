@@ -141,7 +141,7 @@ def custhash(message):
     return final_hash
 
 
-def pkdf(password, salt, iterations, key_length=16):
+def pkdf(password, salt, iterations):
     """
     Génère une clé dérivée à partir d'un mot de passe et d'un salt.
 
@@ -153,7 +153,6 @@ def pkdf(password, salt, iterations, key_length=16):
     """
     assert isinstance(password, str), "Le mot de passe doit être une chaîne de caractères."
     assert isinstance(salt, bytes), "Le salt doit être un objet bytes."
-    assert key_length > 0, "La longueur de clé doit être positive."
     
     # Étape 1 : Convertir le mot de passe en bytes
     password_bytes = password.encode('utf-8')
@@ -164,8 +163,8 @@ def pkdf(password, salt, iterations, key_length=16):
     for i in range(iterations):
         block = custhash(block.decode('latin-1'))  
     
-    # Étape 4 : 16
-    derived_key = block[:key_length]
+    # Étape 4 : 16 octetc = 128 bits
+    derived_key = block[:16]
     
     return derived_key
 

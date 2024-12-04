@@ -23,12 +23,11 @@ def test_pkdf():
     """
     password = "mon_super_mot_de_passe"
     salt = os.urandom(16)  
-    key_length = 16  # 128 bits
     iterations = 320 # je connais déjà le résultat (~350ms / 390ms) pour moi
     
     # Mesurer le temps de calcul
     start_time = time.time()
-    derived_key = pkdf(password, salt, iterations, key_length)
+    derived_key = pkdf(password, salt, iterations)
     end_time = time.time()
     
     # Afficher les résultats
