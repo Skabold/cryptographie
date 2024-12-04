@@ -136,6 +136,6 @@ class AES:
         generated_hash = self.generate_hash(key_str + decrypted_message)
 
         # Check if the generated hash matches the provided mac
-        if generated_hash != mac:
-            raise ValueError("Message integrity check failed. Mic does not match.")
-        return decrypted_data
+        isOk = generated_hash == mac
+    
+        return decrypted_data, isOk
